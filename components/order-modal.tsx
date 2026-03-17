@@ -17,6 +17,7 @@ const products = [
 ];
 
 const BUNDLE_PRICE = 30.0;
+const DELIVERY_FEE = 5.0;
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -34,9 +35,11 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
 
     return init;
   });
+  const [orderType, setOrderType] = useState<"pickup" | "delivery">("delivery");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -58,8 +61,10 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
 
     return sum + extras * p.price;
   }, 0);
-  const total = bundleCount * BUNDLE_PRICE + extrasTotal;
-  const savings = regularTotal - total;
+  const subtotal = bundleCount * BUNDLE_PRICE + extrasTotal;
+  const deliveryFee = orderType === "delivery" ? DELIVERY_FEE : 0;
+  const total = subtotal + deliveryFee;
+  const savings = regularTotal - subtotal;
 
   const updateQty = (id: string, delta: number) => {
     setQuantities((prev) => ({
@@ -69,8 +74,13 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!name.trim() || !email.trim() || itemCount === 0) {
-      setError("Please fill in your name, email, and select at least one juice.");
+    if (!name.trim() || !email.trim() || !phone.trim() || itemCount === 0) {
+      setError("Please fill in your name, email, phone number, and select at least one juice.");
+
+      return;
+    }
+    if (orderType === "delivery" && !address.trim()) {
+      setError("Please enter your delivery address.");
 
       return;
     }
@@ -92,7 +102,10 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
         body: JSON.stringify({
           customer_name: name.trim(),
           customer_email: email.trim(),
-          customer_phone: phone.trim() || null,
+          customer_phone: phone.trim(),
+          order_type: orderType,
+          delivery_address: orderType === "delivery" ? address.trim() : null,
+          delivery_fee: deliveryFee,
           items,
           notes: notes.trim() || null,
         }),
@@ -113,9 +126,11 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
   const handleClose = () => {
     if (success) {
       setQuantities({ wonjo: 0, ginger: 0, bouye: 0 });
+      setOrderType("delivery");
       setName("");
       setEmail("");
       setPhone("");
+      setAddress("");
       setNotes("");
       setSuccess(false);
       setError("");
@@ -152,8 +167,10 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   Order received!
                 </h3>
                 <p className="text-foreground/50 text-sm max-w-sm mx-auto">
-                  We&apos;ll reach out to confirm pickup/delivery details.
-                  Check your email for confirmation.
+                  {orderType === "delivery"
+                    ? "We'll confirm delivery details and reach out before heading your way."
+                    : "We'll reach out to confirm your pickup time."}
+                  {" "}Check your email for confirmation.
                 </p>
               </motion.div>
             </ModalBody>
@@ -173,10 +190,34 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
             <ModalHeader className="flex flex-col gap-1 pb-4">
               <h3 className="font-serif text-xl font-bold">Order Bouye</h3>
               <p className="text-xs text-foreground/40 font-normal">
-                Select your juices. We&apos;ll confirm pickup/delivery details by email.
+                Select your juices and how you&apos;d like to get them.
               </p>
             </ModalHeader>
             <ModalBody className="gap-5">
+              {/* Pickup / Delivery toggle */}
+              <div className="flex gap-2 p-1 rounded-full bg-foreground/[0.03] border border-foreground/[0.06]">
+                <button
+                  className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all ${
+                    orderType === "pickup"
+                      ? "bg-primary text-white shadow-md"
+                      : "text-foreground/40 hover:text-foreground/60"
+                  }`}
+                  onClick={() => setOrderType("pickup")}
+                >
+                  Pickup · Free
+                </button>
+                <button
+                  className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all ${
+                    orderType === "delivery"
+                      ? "bg-primary text-white shadow-md"
+                      : "text-foreground/40 hover:text-foreground/60"
+                  }`}
+                  onClick={() => setOrderType("delivery")}
+                >
+                  Delivery · $5
+                </button>
+              </div>
+
               {/* Product selector */}
               <div className="space-y-3">
                 {products.map((p) => (
@@ -248,26 +289,40 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
               )}
 
               {itemCount > 0 && (
-                <div className="flex items-center justify-between px-1">
-                  <div className="flex items-center gap-2">
-                    <Chip color="primary" size="sm" variant="flat">
-                      {itemCount} juice{itemCount > 1 ? "s" : ""}
-                    </Chip>
-                    {bundleCount > 0 && (
-                      <Chip color="success" size="sm" variant="flat">
-                        {bundleCount} bundle{bundleCount > 1 ? "s" : ""}
+                <div className="px-1 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Chip color="primary" size="sm" variant="flat">
+                        {itemCount} juice{itemCount > 1 ? "s" : ""}
                       </Chip>
-                    )}
-                  </div>
-                  <div className="text-right">
-                    <span className="font-serif font-bold text-lg text-foreground">
-                      ${total.toFixed(2)}
+                      {bundleCount > 0 && (
+                        <Chip color="success" size="sm" variant="flat">
+                          {bundleCount} bundle{bundleCount > 1 ? "s" : ""}
+                        </Chip>
+                      )}
+                    </div>
+                    <span className="text-sm text-foreground/50">
+                      ${subtotal.toFixed(2)}
                     </span>
-                    {savings > 0 && (
-                      <span className="block text-[11px] text-green-600 dark:text-green-400 font-medium">
-                        You save ${savings.toFixed(2)}
+                  </div>
+                  {orderType === "delivery" && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-foreground/40">Delivery fee</span>
+                      <span className="text-sm text-foreground/50">${DELIVERY_FEE.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between pt-1 border-t border-foreground/[0.04]">
+                    <span className="text-sm font-semibold text-foreground">Total</span>
+                    <div className="text-right">
+                      <span className="font-serif font-bold text-lg text-foreground">
+                        ${total.toFixed(2)}
                       </span>
-                    )}
+                      {savings > 0 && (
+                        <span className="block text-[11px] text-green-600 dark:text-green-400 font-medium">
+                          You save ${savings.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -298,7 +353,8 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   onValueChange={setEmail}
                 />
                 <Input
-                  label="Phone (optional)"
+                  isRequired
+                  label="Phone"
                   placeholder="416-xxx-xxxx"
                   radius="lg"
                   size="sm"
@@ -307,9 +363,25 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   variant="bordered"
                   onValueChange={setPhone}
                 />
+                {orderType === "delivery" && (
+                  <Input
+                    isRequired
+                    label="Delivery Address"
+                    placeholder="123 Queen St W, Toronto, ON"
+                    radius="lg"
+                    size="sm"
+                    value={address}
+                    variant="bordered"
+                    onValueChange={setAddress}
+                  />
+                )}
                 <Input
                   label="Notes (optional)"
-                  placeholder="Delivery address, pickup preference, etc."
+                  placeholder={
+                    orderType === "pickup"
+                      ? "Preferred pickup time, etc."
+                      : "Buzzer code, delivery instructions, etc."
+                  }
                   radius="lg"
                   size="sm"
                   value={notes}

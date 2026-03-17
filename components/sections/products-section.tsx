@@ -3,6 +3,7 @@
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import { ArrowRightIcon } from "@/components/icons";
 import { useOrder } from "@/components/order-provider";
@@ -20,8 +21,7 @@ const products = [
     description:
       "Deep ruby-red hibiscus juice, a staple of Gambian celebrations. Rich in antioxidants with a naturally tart, cranberry-like kick.",
     benefits: ["Antioxidant-rich", "Vitamin C", "Anti-inflammatory"],
-    imagePlaceholder:
-      "[Photo: 500ml clear PLA bottle, deep red wonjo juice, natural light, fresh hibiscus flowers arranged beside it, condensation on bottle]",
+    image: "/wonjo.png",
   },
   {
     id: "ginger",
@@ -35,8 +35,7 @@ const products = [
     description:
       "Warm, spicy golden ginger juice from fresh root. An anti-inflammatory powerhouse with a natural kick that warms you from the inside out.",
     benefits: ["Anti-inflammatory", "Digestive aid", "Immune boost"],
-    imagePlaceholder:
-      "[Photo: 500ml clear PLA bottle, golden amber ginger juice, fresh ginger root and lemon slices, warm lighting]",
+    image: "/jinjin.png",
   },
   {
     id: "bouye",
@@ -50,8 +49,7 @@ const products = [
     description:
       "Creamy, silky baobab fruit juice — the drink that inspired our name. A prebiotic superfruit with 6x the vitamin C of oranges.",
     benefits: ["Prebiotic", "6x Vitamin C", "Calcium-rich"],
-    imagePlaceholder:
-      "[Photo: 500ml clear PLA bottle, creamy off-white baobab juice, baobab fruit and powder beside it, minimal background]",
+    image: "/baobab.png",
   },
 ];
 
@@ -150,32 +148,21 @@ export const ProductsSection = () => {
                       background: `radial-gradient(ellipse at 50% 80%, ${product.bgTint}18, ${product.bgTint}08 70%, transparent)`,
                     }}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className="w-24 h-40 rounded-2xl shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2 flex flex-col items-center justify-center relative overflow-hidden"
-                      style={{
-                        background: `linear-gradient(to bottom, ${product.gradientFrom}, ${product.gradientTo})`,
-                      }}
-                    >
-                      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none" />
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-[0.2em] relative z-10 ${
-                          product.id === "bouye" ? "text-[#1B4332]" : "text-white/80"
-                        }`}
-                      >
-                        {product.name}
-                      </span>
-                    </div>
+                  <div className="absolute inset-0 flex items-center justify-center p-6">
+                    <Image
+                      alt={`${product.name} — ${product.subtitle}`}
+                      className="object-contain transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2 drop-shadow-xl"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      src={product.image}
+                    />
                   </div>
                   <div
-                    className="absolute top-4 right-4 w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
+                    className="absolute top-4 right-4 w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg z-10"
                     style={{ backgroundColor: product.color }}
                   >
                     {product.price}
                   </div>
-                  <p className="absolute bottom-3 left-3 right-3 text-[8px] text-foreground/20 text-center">
-                    {product.imagePlaceholder}
-                  </p>
                 </div>
 
                 {/* Content */}

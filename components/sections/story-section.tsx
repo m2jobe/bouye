@@ -3,6 +3,7 @@
 import { Divider } from "@heroui/divider";
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 
 function AnimatedCounter({
   target,
@@ -88,18 +89,16 @@ export const StorySection = () => {
             viewport={{ once: true }}
             whileInView="visible"
           >
-            <div className="aspect-[4/5] rounded-3xl bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] flex items-center justify-center overflow-hidden relative">
-              {/* Inner glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#C41E3A]/10 via-transparent to-[#D4A017]/10" />
-              <div className="text-center text-white/40 px-10 relative z-10">
-                <p className="text-sm leading-relaxed">
-                  [Photo: A warm, vibrant scene from The Gambia — a woman
-                  preparing wonjo (hibiscus) juice at a wooden table, or a
-                  bustling market with colourful hibiscus flowers, baobab fruit,
-                  and ginger root on display. Authentic, not stock. Warm
-                  golden-hour lighting.]
-                </p>
-              </div>
+            <div className="aspect-[4/5] rounded-3xl bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] overflow-hidden relative">
+              <Image
+                alt="Bouye wellness juices — Wonjo, Ginger, and Baobab"
+                className="object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                src="/all3.png"
+              />
+              {/* Inner glow overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#C41E3A]/10 via-transparent to-[#D4A017]/10 pointer-events-none" />
             </div>
             {/* Floating accent cards */}
             <motion.div

@@ -3,6 +3,7 @@
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import { ArrowRightIcon } from "@/components/icons";
 import { useOrder } from "@/components/order-provider";
@@ -139,86 +140,27 @@ export const HeroSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right: Floating bottle mockups */}
+          {/* Right: Product photo */}
           <motion.div
             className="relative flex justify-center lg:justify-end"
+            variants={scaleIn}
             initial="hidden"
-            variants={stagger}
             viewport={{ once: true }}
             whileInView="visible"
           >
-            <div className="relative w-full max-w-md lg:max-w-lg aspect-[3/4]">
-              {/* Glow behind bottles */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-gradient-to-br from-[#C41E3A]/20 via-[#D4A017]/15 to-[#1B4332]/10 blur-[60px]" />
-
-              {/* Wonjo bottle — center, front */}
-              <motion.div
-                className="absolute top-4 left-1/2 -translate-x-1/2 z-30 animate-float"
-                variants={scaleIn}
-              >
-                <div className="w-44 sm:w-52 h-[280px] sm:h-[320px] rounded-3xl bg-gradient-to-b from-[#C41E3A] via-[#B01830] to-[#8B1428] shadow-2xl shadow-[#C41E3A]/30 flex flex-col items-center justify-between py-6 px-4 relative overflow-hidden hover-lift cursor-default">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-0 right-4 w-8 h-full bg-gradient-to-b from-white/10 via-white/5 to-transparent pointer-events-none rounded-full blur-sm" />
-                  <div className="relative z-10 flex flex-col items-center gap-1 mt-4">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">Bouye</span>
-                    <div className="w-14 h-[0.5px] bg-white/20 my-1" />
-                    <span className="text-lg font-serif font-bold text-white tracking-wide">Wonjo</span>
-                    <span className="text-[10px] text-white/60 uppercase tracking-widest">Hibiscus</span>
-                  </div>
-                  <div className="relative z-10 text-center">
-                    <span className="text-[9px] text-white/40 uppercase tracking-wider">500ml · Pure Cane Sugar</span>
-                  </div>
-                  <p className="absolute bottom-2 left-2 right-2 text-[8px] text-white/30 text-center leading-tight">
-                    [Photo: Clear PLA bottle, deep red wonjo juice glowing in natural light, condensation drops]
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Ginger bottle — left, back */}
-              <motion.div
-                className="absolute bottom-12 left-0 sm:left-4 z-20 animate-float-delayed"
-                variants={scaleIn}
-              >
-                <div className="w-36 sm:w-44 h-[240px] sm:h-[280px] rounded-3xl bg-gradient-to-b from-[#D4A017] via-[#C49515] to-[#9B7410] shadow-2xl shadow-[#D4A017]/25 flex flex-col items-center justify-between py-5 px-3 relative overflow-hidden hover-lift cursor-default rotate-[-6deg]">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/25 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-0 right-3 w-6 h-full bg-gradient-to-b from-white/15 via-white/5 to-transparent pointer-events-none rounded-full blur-sm" />
-                  <div className="relative z-10 flex flex-col items-center gap-1 mt-3">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/50">Bouye</span>
-                    <div className="w-12 h-[0.5px] bg-white/20 my-1" />
-                    <span className="text-base font-serif font-bold text-white tracking-wide">Ginger</span>
-                    <span className="text-[9px] text-white/60 uppercase tracking-widest">Fresh Root</span>
-                  </div>
-                  <div className="relative z-10">
-                    <span className="text-[8px] text-white/40 uppercase tracking-wider">500ml</span>
-                  </div>
-                  <p className="absolute bottom-2 left-2 right-2 text-[7px] text-white/25 text-center leading-tight">
-                    [Photo: Golden amber ginger juice, warm tones]
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Baobab bottle — right, back */}
-              <motion.div
-                className="absolute bottom-8 right-0 sm:right-4 z-10 animate-float-slow"
-                variants={scaleIn}
-              >
-                <div className="w-36 sm:w-44 h-[240px] sm:h-[280px] rounded-3xl bg-gradient-to-b from-[#FAF7F0] via-[#F5F0E8] to-[#E8E0D0] shadow-2xl shadow-[#D4A017]/10 flex flex-col items-center justify-between py-5 px-3 relative overflow-hidden hover-lift cursor-default rotate-[5deg]">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-0 right-3 w-6 h-full bg-gradient-to-b from-white/30 via-white/10 to-transparent pointer-events-none rounded-full blur-sm" />
-                  <div className="relative z-10 flex flex-col items-center gap-1 mt-3">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#1B4332]/40">Bouye</span>
-                    <div className="w-12 h-[0.5px] bg-[#1B4332]/15 my-1" />
-                    <span className="text-base font-serif font-bold text-[#1B4332] tracking-wide">Bouye</span>
-                    <span className="text-[9px] text-[#1B4332]/50 uppercase tracking-widest">Baobab</span>
-                  </div>
-                  <div className="relative z-10">
-                    <span className="text-[8px] text-[#1B4332]/30 uppercase tracking-wider">500ml</span>
-                  </div>
-                  <p className="absolute bottom-2 left-2 right-2 text-[7px] text-[#1B4332]/20 text-center leading-tight">
-                    [Photo: Creamy off-white baobab juice, clean]
-                  </p>
-                </div>
-              </motion.div>
+            <div className="relative w-full max-w-md lg:max-w-lg">
+              {/* Glow behind image */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-br from-[#C41E3A]/20 via-[#D4A017]/15 to-[#1B4332]/10 blur-[80px]" />
+              <div className="relative animate-float">
+                <Image
+                  alt="Bouye wellness juices — Wonjo, Ginger, and Baobab bottles"
+                  className="relative z-10 drop-shadow-2xl"
+                  height={700}
+                  priority
+                  src="/all3.png"
+                  width={600}
+                />
+              </div>
             </div>
           </motion.div>
         </div>
