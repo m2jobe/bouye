@@ -174,7 +174,7 @@ export const StorySection = () => {
               </p>
               <p>
                 We grew up on these juices. Now we&apos;re bringing them to
-                Toronto — traditional recipes, pure cane sugar, plant-based
+                Toronto — traditional recipes, pure coconut sugar, plant-based
                 compostable bottles. The same wellness drinks that&apos;ve
                 nourished West Africa for generations, delivered to your door.
               </p>

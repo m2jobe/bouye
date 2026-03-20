@@ -10,7 +10,7 @@ const comparisonRows = [
   {
     label: "Sugar per drink",
     bouye: "Under 20g",
-    bouyeDetail: "Pure cane sugar",
+    bouyeDetail: "Pure coconut sugar",
     boba: "50–90g",
     bobaDetail: "Corn syrup",
     bouyeWins: true,
@@ -178,7 +178,7 @@ export const HealthSection = () => {
               </div>
               <SugarBar amount={20} color="#1B4332" delay={0.2} max={90} />
               <span className="text-[11px] text-foreground/30 mt-1 block">
-                Pure cane sugar
+                Pure coconut sugar
               </span>
             </div>
             <div>

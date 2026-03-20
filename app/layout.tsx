@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description:
-    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices with pure cane sugar, under 20g per bottle. Plant-based compostable packaging. Order delivery via Uber Eats or direct across the GTA.",
+    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices with pure coconut sugar, under 20g per bottle. Plant-based compostable packaging. Order delivery via Uber Eats or direct across the GTA.",
   keywords: [
     "Gambian juice Toronto",
     "hibiscus juice delivery Toronto",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title:
       "Bouye — Gambian Wellness Juices | Toronto Delivery",
     description:
-      "Wonjo (Hibiscus), Ginger & Baobab wellness juices handcrafted in Toronto. Pure cane sugar, under 20g per bottle. Plant-based packaging. Order on Uber Eats or direct.",
+      "Wonjo (Hibiscus), Ginger & Baobab wellness juices handcrafted in Toronto. Pure coconut sugar, under 20g per bottle. Plant-based packaging. Order on Uber Eats or direct.",
     images: [
       {
         url: "/og-image.jpg", // TODO: Add actual OG image (1200x630)

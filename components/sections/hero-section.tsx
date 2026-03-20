@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Button } from "@heroui/button";
@@ -90,9 +92,9 @@ export const HeroSection = () => {
               className="text-lg sm:text-xl text-foreground/50 leading-relaxed"
               variants={fadeUp}
             >
-              Three handcrafted wellness juices — Wonjo, Ginger & Baobab —
-              made with pure cane sugar, in plant-based compostable bottles.
-              Zero artificial anything.
+              Three handcrafted wellness juices — Wonjo, Ginger & Baobab — made
+              with pure coconut sugar, in plant-based compostable bottles. Zero
+              artificial anything.
             </motion.p>
 
             <motion.div
@@ -172,7 +174,9 @@ export const HeroSection = () => {
           initial={{ opacity: 0 }}
           transition={{ delay: 1.5, duration: 0.8 }}
         >
-          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/25">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/25">
+            Scroll
+          </span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             className="w-5 h-8 rounded-full border border-foreground/15 flex items-start justify-center pt-1.5"
