@@ -91,7 +91,7 @@ export const HeroSection = () => {
               variants={fadeUp}
             >
               Three handcrafted wellness juices — Wonjo, Ginger & Baobab —
-              made with pure cane sugar, in plant-based compostable bottles.
+              made with pure coconut sugar, in plant-based compostable bottles.
               Zero artificial anything.
             </motion.p>
 
