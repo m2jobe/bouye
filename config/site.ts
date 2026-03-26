@@ -3,7 +3,7 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: "Bouye — Gambian Wellness Juices | Toronto",
   description:
-    "Toronto's first and only Gambian juice brand. Wonjo (Hibiscus), Ginger, and Baobab wellness juices made with pure coconut sugar, ~20g per bottle. Delivered to your door.",
+    "Toronto's first and only Gambian juice brand. Wonjo (Hibiscus), Jinjin (Ginger), and Bouye (Baobab) wellness juices made with pure coconut sugar, ~20g per bottle. Delivered to your door.",
   navItems: [
     { label: "Products", href: "#products" },
     { label: "Our Story", href: "#story" },

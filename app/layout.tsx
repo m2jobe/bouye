@@ -13,11 +13,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bouye.ca"),
   title: {
     default:
-      "Bouye — Gambian Wellness Juices | Wonjo, Ginger & Baobab | Toronto Delivery",
+      "Bouye — Gambian Wellness Juices | Wonjo, Jinjin & Bouye | Toronto Delivery",
     template: `%s | ${siteConfig.name}`,
   },
   description:
-    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices with pure coconut sugar, ~20g per bottle. Plant-based compostable packaging. Order direct across the GTA.",
+    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Jinjin (Ginger) & Bouye (Baobab) wellness juices with pure coconut sugar, ~20g per bottle. Glass bottles. Order direct across the GTA.",
   keywords: [
     "Gambian juice Toronto",
     "hibiscus juice delivery Toronto",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "ginger juice delivery Toronto",
     "African drink delivery Toronto",
     "low sugar juice Toronto",
-    "compostable bottle juice",
+    "glass bottle juice",
     "West African juice Toronto",
   ],
   authors: [{ name: "Bouye" }],
@@ -52,13 +52,13 @@ export const metadata: Metadata = {
     title:
       "Bouye — Gambian Wellness Juices | Toronto Delivery",
     description:
-      "Wonjo (Hibiscus), Ginger & Baobab wellness juices handcrafted in Toronto. Pure coconut sugar, ~20g per bottle. Plant-based packaging. Order direct.",
+      "Wonjo (Hibiscus), Jinjin (Ginger) & Bouye (Baobab) wellness juices handcrafted in Toronto. Pure coconut sugar, ~20g per bottle. Glass bottles. Order direct.",
     images: [
       {
         url: "/og-image.jpg", // TODO: Add actual OG image (1200x630)
         width: 1200,
         height: 630,
-        alt: "Bouye — Gambian Wellness Juices: Wonjo, Ginger, and Baobab bottles",
+        alt: "Bouye — Gambian Wellness Juices: Wonjo, Jinjin, and Bouye bottles",
       },
     ],
   },
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bouye — Gambian Wellness Juices | Toronto",
     description:
-      "Toronto's first Gambian juice brand. Wonjo, Ginger & Baobab — delivered to your door.",
+      "Toronto's first Gambian juice brand. Wonjo, Jinjin & Bouye — delivered to your door.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -107,7 +107,7 @@ const jsonLd = {
       "@id": "https://bouye.ca/#business",
       name: "Bouye",
       description:
-        "Toronto's first and only Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices.",
+        "Toronto's first and only Gambian juice brand. Handcrafted Wonjo (Hibiscus), Jinjin (Ginger) & Bouye (Baobab) wellness juices.",
       url: "https://bouye.ca",
       logo: "https://bouye.ca/logo.png",
       image: "https://bouye.ca/og-image.jpg",
@@ -145,7 +145,7 @@ const jsonLd = {
       "@id": "https://bouye.ca/#food",
       name: "Bouye",
       description:
-        "Gambian wellness juices — Wonjo (Hibiscus), Ginger & Baobab. Delivery across the GTA.",
+        "Gambian wellness juices — Wonjo (Hibiscus), Jinjin (Ginger) & Bouye (Baobab). Delivery across the GTA.",
       url: "https://bouye.ca",
       servesCuisine: "Gambian",
       menu: "https://bouye.ca/#products",
@@ -169,7 +169,7 @@ const jsonLd = {
             },
             {
               "@type": "MenuItem",
-              name: "Ginger Juice",
+              name: "Jinjin (Ginger Juice)",
               description:
                 "Warm, spicy golden ginger juice. Anti-inflammatory powerhouse. 500ml, ~20g sugar.",
               offers: {
@@ -193,7 +193,7 @@ const jsonLd = {
               "@type": "MenuItem",
               name: "The Bouye Bundle (All 3 Juices)",
               description:
-                "One of each — Wonjo, Ginger & Baobab. 3x 500ml bottles. Save $6.",
+                "One of each — Wonjo, Jinjin & Bouye. 3x 500ml bottles. Save $6.",
               offers: {
                 "@type": "Offer",
                 price: "30.00",

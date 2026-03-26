@@ -25,7 +25,7 @@ const products = [
   },
   {
     id: "ginger",
-    name: "Ginger",
+    name: "Jinjin",
     subtitle: "Fresh Ginger Juice",
     price: "$12",
     color: "#D4A017",
@@ -96,7 +96,7 @@ export const ProductsSection = () => {
           <p className="text-lg text-foreground/45 max-w-lg mx-auto leading-relaxed">
             $12 each · All 3 for $30.
             <br className="hidden sm:block" />
-            Plant-based compostable packaging. Nothing artificial.
+            Glass bottles. Nothing artificial.
           </p>
         </motion.div>
 

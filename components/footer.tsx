@@ -23,7 +23,7 @@ export const Footer = () => {
             </div>
             <p className="text-sm text-foreground/35 leading-relaxed max-w-xs mb-6">
               Gambian wellness juices, handcrafted in Toronto.
-              Wonjo, Ginger & Baobab — delivered fresh to your door.
+              Wonjo, Jinjin & Bouye — delivered fresh to your door.
             </p>
             <div className="flex gap-2">
               <Link

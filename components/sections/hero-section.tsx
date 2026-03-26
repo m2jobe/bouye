@@ -91,8 +91,8 @@ export const HeroSection = () => {
               className="text-lg sm:text-xl text-foreground/50 leading-relaxed"
               variants={fadeUp}
             >
-              Three handcrafted wellness juices — Wonjo, Ginger & Baobab — made
-              with pure coconut sugar, in plant-based compostable bottles. Zero
+              Three handcrafted wellness juices — Wonjo, Jinjin & Bouye — made
+              with pure coconut sugar, in glass bottles. Zero
               artificial anything.
             </motion.p>
 
@@ -123,7 +123,7 @@ export const HeroSection = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#1B4332]" />
-                Compostable PLA bottles
+                Glass bottles
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#D4A017]" />
@@ -145,7 +145,7 @@ export const HeroSection = () => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-br from-[#C41E3A]/20 via-[#D4A017]/15 to-[#1B4332]/10 blur-[80px]" />
               <div className="relative animate-float">
                 <Image
-                  alt="Bouye wellness juices — Wonjo, Ginger, and Baobab bottles"
+                  alt="Bouye wellness juices — Wonjo, Jinjin, and Bouye bottles"
                   className="relative z-10 drop-shadow-2xl"
                   height={700}
                   priority

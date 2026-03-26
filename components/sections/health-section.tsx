@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Chip } from "@heroui/chip";
@@ -24,8 +26,8 @@ const comparisonRows = [
   },
   {
     label: "Packaging",
-    bouye: "Compostable PLA",
-    bouyeDetail: "Plant-based",
+    bouye: "Glass",
+    bouyeDetail: "Reusable",
     boba: "Plastic cup",
     bobaDetail: "Disposable",
     bouyeWins: true,
@@ -59,7 +61,7 @@ const juiceHealth = [
     ],
   },
   {
-    name: "Ginger",
+    name: "Jinjin",
     subtitle: "Fresh Root",
     color: "#D4A017",
     icon: "🫚",
@@ -84,7 +86,17 @@ const juiceHealth = [
   },
 ];
 
-function SugarBar({ amount, max, color, delay }: { amount: number; max: number; color: string; delay: number }) {
+function SugarBar({
+  amount,
+  max,
+  color,
+  delay,
+}: {
+  amount: number;
+  max: number;
+  color: string;
+  delay: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
 
@@ -92,7 +104,9 @@ function SugarBar({ amount, max, color, delay }: { amount: number; max: number; 
     <div ref={ref} className="w-full">
       <div className="h-3 rounded-full bg-foreground/[0.04] overflow-hidden">
         <motion.div
-          animate={isInView ? { width: `${(amount / max) * 100}%` } : { width: 0 }}
+          animate={
+            isInView ? { width: `${(amount / max) * 100}%` } : { width: 0 }
+          }
           className="h-full rounded-full"
           initial={{ width: 0 }}
           style={{ backgroundColor: color }}
@@ -172,9 +186,7 @@ export const HealthSection = () => {
                 <span className="text-sm font-semibold text-primary">
                   Bouye Juices
                 </span>
-                <span className="text-sm font-bold text-primary">
-                  &lt;20g
-                </span>
+                <span className="text-sm font-bold text-primary">~20g</span>
               </div>
               <SugarBar amount={20} color="#1B4332" delay={0.2} max={90} />
               <span className="text-[11px] text-foreground/30 mt-1 block">
@@ -256,11 +268,7 @@ export const HealthSection = () => {
           whileInView="visible"
         >
           {juiceHealth.map((juice) => (
-            <motion.div
-              key={juice.name}
-              className="group"
-              variants={fadeUp}
-            >
+            <motion.div key={juice.name} className="group" variants={fadeUp}>
               <div className="rounded-3xl border border-foreground/[0.06] bg-content1 p-7 h-full hover-lift relative overflow-hidden">
                 {/* Hover glow */}
                 <div

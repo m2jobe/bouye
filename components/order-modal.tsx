@@ -12,7 +12,7 @@ import { CheckIcon } from "@/components/icons";
 
 const products = [
   { id: "wonjo", name: "Wonjo", subtitle: "Hibiscus", price: 12.0, color: "#C41E3A" },
-  { id: "ginger", name: "Ginger", subtitle: "Fresh Root", price: 12.0, color: "#D4A017" },
+  { id: "ginger", name: "Jinjin", subtitle: "Fresh Ginger Juice", price: 12.0, color: "#D4A017" },
   { id: "bouye", name: "Bouye", subtitle: "Baobab", price: 12.0, color: "#1B4332" },
 ];
 

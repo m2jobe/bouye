@@ -91,7 +91,7 @@ export const StorySection = () => {
           >
             <div className="aspect-[4/5] rounded-3xl bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] overflow-hidden relative">
               <Image
-                alt="Bouye wellness juices — Wonjo, Ginger, and Baobab"
+                alt="Bouye wellness juices — Wonjo, Jinjin, and Bouye"
                 className="object-cover"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -174,8 +174,8 @@ export const StorySection = () => {
               </p>
               <p>
                 We grew up on these juices. Now we&apos;re bringing them to
-                Toronto — traditional recipes, pure coconut sugar, plant-based
-                compostable bottles. The same wellness drinks that&apos;ve
+                Toronto — traditional recipes, pure coconut sugar, glass
+                bottles. The same wellness drinks that&apos;ve
                 nourished West Africa for generations, delivered to your door.
               </p>
             </motion.div>
