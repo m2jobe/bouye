@@ -9,7 +9,7 @@ import { CheckIcon, XIcon, SparklesIcon } from "@/components/icons";
 const comparisonRows = [
   {
     label: "Sugar per drink",
-    bouye: "Under 20g",
+    bouye: "~20g",
     bouyeDetail: "Pure coconut sugar",
     boba: "50–90g",
     bobaDetail: "Corn syrup",

@@ -3,7 +3,6 @@
 "use client";
 
 import { Button } from "@heroui/button";
-import { Chip } from "@heroui/chip";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -112,15 +111,6 @@ export const HeroSection = () => {
               >
                 Order Now
               </Button>
-              <Chip
-                className="h-12 px-5 text-sm"
-                color="warning"
-                radius="full"
-                size="lg"
-                variant="flat"
-              >
-                🛵 Uber Eats — Coming Soon
-              </Chip>
             </motion.div>
 
             <motion.div
@@ -129,7 +119,7 @@ export const HeroSection = () => {
             >
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#C41E3A]" />
-                Under 20g sugar
+                ~20g sugar
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#1B4332]" />

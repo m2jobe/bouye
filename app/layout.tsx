@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description:
-    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices with pure coconut sugar, under 20g per bottle. Plant-based compostable packaging. Order delivery via Uber Eats or direct across the GTA.",
+    "Toronto's first Gambian juice brand. Handcrafted Wonjo (Hibiscus), Ginger & Baobab wellness juices with pure coconut sugar, ~20g per bottle. Plant-based compostable packaging. Order direct across the GTA.",
   keywords: [
     "Gambian juice Toronto",
     "hibiscus juice delivery Toronto",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title:
       "Bouye — Gambian Wellness Juices | Toronto Delivery",
     description:
-      "Wonjo (Hibiscus), Ginger & Baobab wellness juices handcrafted in Toronto. Pure coconut sugar, under 20g per bottle. Plant-based packaging. Order on Uber Eats or direct.",
+      "Wonjo (Hibiscus), Ginger & Baobab wellness juices handcrafted in Toronto. Pure coconut sugar, ~20g per bottle. Plant-based packaging. Order direct.",
     images: [
       {
         url: "/og-image.jpg", // TODO: Add actual OG image (1200x630)
@@ -145,7 +145,7 @@ const jsonLd = {
       "@id": "https://bouye.ca/#food",
       name: "Bouye",
       description:
-        "Gambian wellness juices — Wonjo (Hibiscus), Ginger & Baobab. Delivery across the GTA via Uber Eats.",
+        "Gambian wellness juices — Wonjo (Hibiscus), Ginger & Baobab. Delivery across the GTA.",
       url: "https://bouye.ca",
       servesCuisine: "Gambian",
       menu: "https://bouye.ca/#products",
@@ -160,7 +160,7 @@ const jsonLd = {
               "@type": "MenuItem",
               name: "Wonjo (Hibiscus Juice)",
               description:
-                "Deep ruby-red hibiscus juice rich in antioxidants and vitamin C. 500ml, under 20g sugar.",
+                "Deep ruby-red hibiscus juice rich in antioxidants and vitamin C. 500ml, ~20g sugar.",
               offers: {
                 "@type": "Offer",
                 price: "12.00",
@@ -171,7 +171,7 @@ const jsonLd = {
               "@type": "MenuItem",
               name: "Ginger Juice",
               description:
-                "Warm, spicy golden ginger juice. Anti-inflammatory powerhouse. 500ml, under 20g sugar.",
+                "Warm, spicy golden ginger juice. Anti-inflammatory powerhouse. 500ml, ~20g sugar.",
               offers: {
                 "@type": "Offer",
                 price: "12.00",
@@ -182,7 +182,7 @@ const jsonLd = {
               "@type": "MenuItem",
               name: "Bouye (Baobab Juice)",
               description:
-                "Creamy baobab fruit juice. Prebiotic superfruit with 6x vitamin C of oranges. 500ml, under 20g sugar.",
+                "Creamy baobab fruit juice. Prebiotic superfruit with 6x vitamin C of oranges. 500ml, ~20g sugar.",
               offers: {
                 "@type": "Offer",
                 price: "12.00",

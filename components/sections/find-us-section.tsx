@@ -21,16 +21,6 @@ const channels = [
     accent: "#1B4332",
   },
   {
-    emoji: "🛵",
-    name: "Uber Eats",
-    description:
-      "We're coming to Uber Eats soon. Follow us on Instagram to be the first to know when we go live.",
-    tag: "Delivery",
-    availability: "Coming Soon",
-    action: "instagram",
-    accent: "#D4A017",
-  },
-  {
     emoji: "🏕️",
     name: "Markets & Pop-Ups",
     description:
@@ -88,12 +78,12 @@ export const FindUsSection = () => {
             Get your Bouye
           </h2>
           <p className="text-lg text-foreground/40 max-w-md mx-auto">
-            Order direct through our website. More channels coming soon.
+            Order direct through our website or find us at a market.
           </p>
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-3 gap-5 lg:gap-6"
+          className="grid md:grid-cols-2 gap-5 lg:gap-6 max-w-3xl mx-auto"
           initial="hidden"
           variants={stagger}
           viewport={{ once: true }}

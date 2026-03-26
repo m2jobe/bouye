@@ -79,11 +79,6 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <span className="text-sm text-foreground/20">
-                  Uber Eats — Coming Soon
-                </span>
-              </li>
-              <li>
                 <Link
                   className="text-sm text-foreground/35 hover:text-foreground transition-colors"
                   href="#find-us"
