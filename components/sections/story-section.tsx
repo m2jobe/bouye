@@ -196,7 +196,7 @@ export const StorySection = () => {
               </div>
               <div>
                 <div className="text-3xl sm:text-4xl font-bold text-[#D4A017] font-serif">
-                  &lt;<AnimatedCounter target={20} />
+                  ~<AnimatedCounter target={20} />
                   <span className="text-lg">g</span>
                 </div>
                 <div className="text-[13px] text-white/35 mt-2 leading-tight">
