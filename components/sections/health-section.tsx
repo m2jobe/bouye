@@ -39,7 +39,7 @@ const juiceHealth = [
     icon: "🌳",
     benefits: [
       "6x more vitamin C than oranges",
-      "Prebiotic — supports gut health",
+      "Prebiotic, supports gut health",
       "Rich in calcium & potassium",
       "High in dietary fibre",
     ],

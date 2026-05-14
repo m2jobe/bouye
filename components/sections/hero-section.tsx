@@ -91,9 +91,9 @@ export const HeroSection = () => {
               className="text-lg sm:text-xl text-foreground/50 leading-relaxed"
               variants={fadeUp}
             >
-              Three handcrafted wellness juices — Wonjo, Jinjin & Bouye — made
-              with pure coconut sugar, in glass bottles. Zero
-              artificial anything.
+              Three handcrafted wellness juices: Wonjo, Jinjin, and Bouye. Made
+              with pure coconut sugar, in glass bottles. Zero artificial
+              anything.
             </motion.p>
 
             <motion.div
@@ -119,7 +119,7 @@ export const HeroSection = () => {
             >
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#C41E3A]" />
-                ~20g sugar
+                ~14g sugar
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#1B4332]" />

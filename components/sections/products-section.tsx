@@ -47,7 +47,7 @@ const products = [
     gradientTo: "#DDD5C4",
     bgTint: "#D4A017",
     description:
-      "Creamy, silky baobab fruit juice — the drink that inspired our name. A prebiotic superfruit with 6x the vitamin C of oranges.",
+      "Creamy, silky baobab fruit juice, the drink that inspired our name. A prebiotic superfruit with 6x the vitamin C of oranges.",
     benefits: ["Prebiotic", "6x Vitamin C", "Calcium-rich"],
     image: "/baobab.png",
   },
@@ -118,7 +118,7 @@ export const ProductsSection = () => {
               <div className="w-5 h-5 rounded-full bg-[#1B4332] border-2 border-background" />
             </div>
             <span className="text-sm font-semibold text-primary">
-              The Bouye Bundle — All 3 for $30
+              The Bouye Bundle · All 3 for $30
             </span>
             <span className="text-[11px] font-medium text-green-600 dark:text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full">
               Save $6

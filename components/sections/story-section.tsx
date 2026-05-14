@@ -160,21 +160,21 @@ export const StorySection = () => {
               <p>
                 In The Gambia,{" "}
                 <strong className="text-white font-medium">wonjo</strong>{" "}
-                flows at every celebration — weddings, naming ceremonies, family
+                flows at every celebration: weddings, naming ceremonies, family
                 gatherings. Deep red, naturally tart, impossibly refreshing.
                 It&apos;s the drink that brings people together.
               </p>
               <p>
                 <strong className="text-white font-medium">Bouye</strong> is
-                the one your grandmother makes — creamy, smooth, packed with the
+                the one your grandmother makes: creamy, smooth, packed with the
                 fruit of the iconic baobab tree. And{" "}
                 <strong className="text-white font-medium">ginger juice</strong>
-                ? That&apos;s the remedy for everything — or so every Gambian
+                ? That&apos;s the remedy for everything, or so every Gambian
                 auntie will tell you.
               </p>
               <p>
                 We grew up on these juices. Now we&apos;re bringing them to
-                Toronto — traditional recipes, pure coconut sugar, glass
+                Toronto with traditional recipes, pure coconut sugar, and glass
                 bottles. The same wellness drinks that&apos;ve
                 nourished West Africa for generations, delivered to your door.
               </p>
@@ -196,7 +196,7 @@ export const StorySection = () => {
               </div>
               <div>
                 <div className="text-3xl sm:text-4xl font-bold text-[#D4A017] font-serif">
-                  ~<AnimatedCounter target={20} />
+                  ~<AnimatedCounter target={14} />
                   <span className="text-lg">g</span>
                 </div>
                 <div className="text-[13px] text-white/35 mt-2 leading-tight">
