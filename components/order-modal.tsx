@@ -172,6 +172,10 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                     : "We'll reach out to confirm your pickup time."}
                   {" "}Check your email for confirmation.
                 </p>
+                <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/[0.06] border border-primary/[0.1] text-xs text-primary font-medium">
+                  <span>💵</span>
+                  Payment collected on {orderType === "delivery" ? "arrival" : "pickup"} (cash or e-transfer)
+                </div>
               </motion.div>
             </ModalBody>
             <ModalFooter>
@@ -388,6 +392,18 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   variant="bordered"
                   onValueChange={setNotes}
                 />
+              </div>
+
+              <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-foreground/[0.025] border border-foreground/[0.06]">
+                <span className="text-lg">💵</span>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-foreground">
+                    Pay on {orderType === "delivery" ? "arrival" : "pickup"}
+                  </p>
+                  <p className="text-[11px] text-foreground/45 leading-snug">
+                    No upfront payment. Cash or e-transfer accepted when we hand off your juices.
+                  </p>
+                </div>
               </div>
 
               {error && (

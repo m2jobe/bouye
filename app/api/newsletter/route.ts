@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       console.error("Supabase newsletter error:", error);
 
       return NextResponse.json(
-        { error: "Failed to subscribe" },
+        { error: "Failed to subscribe", code: error.code },
         { status: 500 },
       );
     }

@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       console.error("Supabase insert error:", error);
 
       return NextResponse.json(
-        { error: "Failed to create order" },
+        { error: "Failed to create order", code: error.code },
         { status: 500 },
       );
     }
