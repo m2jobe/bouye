@@ -31,6 +31,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const MAX_BOTTLES_PER_ORDER = 10;
+    const bottleCount = items.reduce(
+      (sum: number, item: { quantity: number }) => sum + (item.quantity || 0),
+      0,
+    );
+
+    if (bottleCount > MAX_BOTTLES_PER_ORDER) {
+      return NextResponse.json(
+        {
+          error: `Orders are limited to ${MAX_BOTTLES_PER_ORDER} bottles per household.`,
+        },
+        { status: 400 },
+      );
+    }
+
     // Calculate total
     const subtotal = items.reduce(
       (sum: number, item: { price: number; quantity: number }) =>

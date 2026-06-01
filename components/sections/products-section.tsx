@@ -8,12 +8,17 @@ import Image from "next/image";
 import { ArrowRightIcon } from "@/components/icons";
 import { useOrder } from "@/components/order-provider";
 
+const BOUYE_PROMO_END = new Date("2026-06-08T00:00:00-04:00");
+const isBouyePromoActive = () => Date.now() < BOUYE_PROMO_END.getTime();
+
 const products = [
   {
     id: "wonjo",
     name: "Wonjo",
     subtitle: "Hibiscus Juice",
-    price: "$12",
+    price: "$10",
+    regularPrice: undefined as string | undefined,
+    promoLabel: undefined as string | undefined,
     color: "#C41E3A",
     gradientFrom: "#C41E3A",
     gradientTo: "#8B1428",
@@ -22,12 +27,16 @@ const products = [
       "Deep ruby-red hibiscus juice, a staple of Gambian celebrations. Rich in antioxidants with a naturally tart, cranberry-like kick.",
     benefits: ["Antioxidant-rich", "Vitamin C", "Anti-inflammatory"],
     image: "/wonjo.png",
+    available: true,
+    unavailableLabel: undefined as string | undefined,
   },
   {
     id: "ginger",
     name: "Jinjin",
     subtitle: "Fresh Ginger Juice",
     price: "$12",
+    regularPrice: undefined,
+    promoLabel: undefined,
     color: "#D4A017",
     gradientFrom: "#D4A017",
     gradientTo: "#9B7410",
@@ -36,12 +45,16 @@ const products = [
       "Warm, spicy golden ginger juice from fresh root. An anti-inflammatory powerhouse with a natural kick that warms you from the inside out.",
     benefits: ["Anti-inflammatory", "Digestive aid", "Immune boost"],
     image: "/jinjin.png",
+    available: false,
+    unavailableLabel: "Back soon",
   },
   {
     id: "bouye",
     name: "Bouye",
     subtitle: "Baobab Juice",
-    price: "$12",
+    price: isBouyePromoActive() ? "$12" : "$15",
+    regularPrice: isBouyePromoActive() ? "$15" : undefined,
+    promoLabel: isBouyePromoActive() ? "Launch week" : undefined,
     color: "#1B4332",
     gradientFrom: "#F5F0E8",
     gradientTo: "#DDD5C4",
@@ -50,8 +63,12 @@ const products = [
       "Creamy, silky baobab fruit juice, the drink that inspired our name. A prebiotic superfruit with 6x the vitamin C of oranges.",
     benefits: ["Prebiotic", "6x Vitamin C", "Calcium-rich"],
     image: "/baobab.png",
+    available: true,
+    unavailableLabel: undefined,
   },
 ];
+
+const bundleAvailable = products.every((p) => p.available);
 
 const containerVariants = {
   hidden: {},
@@ -94,13 +111,13 @@ export const ProductsSection = () => {
             </span>
           </h2>
           <p className="text-lg text-foreground/45 max-w-lg mx-auto leading-relaxed">
-            $12 each · All 3 for $30.
-            <br className="hidden sm:block" />
             Glass bottles. Nothing artificial.
+            <br className="hidden sm:block" />
+            Free delivery across the GTA all June.
           </p>
         </motion.div>
 
-        {/* Bundle CTA */}
+        {/* Promo banner: free June delivery */}
         <motion.div
           className="flex justify-center mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -108,23 +125,40 @@ export const ProductsSection = () => {
           viewport={{ once: true }}
           whileInView={{ opacity: 1, y: 0 }}
         >
-          <button
-            className="group/bundle inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/[0.06] border border-primary/[0.1] hover:bg-primary/[0.1] transition-all cursor-pointer"
-            onClick={() => openOrder()}
-          >
-            <div className="flex -space-x-1.5">
-              <div className="w-5 h-5 rounded-full bg-[#C41E3A] border-2 border-background" />
-              <div className="w-5 h-5 rounded-full bg-[#D4A017] border-2 border-background" />
-              <div className="w-5 h-5 rounded-full bg-[#1B4332] border-2 border-background" />
-            </div>
-            <span className="text-sm font-semibold text-primary">
-              The Bouye Bundle · All 3 for $30
+          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#1B4332]/[0.08] to-[#D4A017]/[0.08] border border-[#1B4332]/[0.12]">
+            <span className="text-base">🚚</span>
+            <span className="text-sm font-semibold text-foreground">
+              Free delivery all June
             </span>
             <span className="text-[11px] font-medium text-green-600 dark:text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full">
-              Save $6
+              GTA only
             </span>
-          </button>
+          </div>
         </motion.div>
+
+        {bundleAvailable && (
+          <motion.div
+            className="flex justify-center -mt-4 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <button
+              className="group/bundle inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/[0.06] border border-primary/[0.1] hover:bg-primary/[0.1] transition-all cursor-pointer"
+              onClick={() => openOrder()}
+            >
+              <div className="flex -space-x-1.5">
+                <div className="w-5 h-5 rounded-full bg-[#C41E3A] border-2 border-background" />
+                <div className="w-5 h-5 rounded-full bg-[#D4A017] border-2 border-background" />
+                <div className="w-5 h-5 rounded-full bg-[#1B4332] border-2 border-background" />
+              </div>
+              <span className="text-sm font-semibold text-primary">
+                Order all three
+              </span>
+            </button>
+          </motion.div>
+        )}
 
         <motion.div
           className="grid md:grid-cols-3 gap-6 lg:gap-8"
@@ -139,7 +173,11 @@ export const ProductsSection = () => {
               className="group"
               variants={cardVariants}
             >
-              <div className="relative rounded-3xl border border-foreground/[0.06] bg-content1 overflow-hidden hover-lift h-full flex flex-col">
+              <div
+                className={`relative rounded-3xl border border-foreground/[0.06] bg-content1 overflow-hidden hover-lift h-full flex flex-col ${
+                  product.available ? "" : "opacity-85"
+                }`}
+              >
                 {/* Product image area */}
                 <div className="relative h-72 sm:h-80 overflow-hidden">
                   <div
@@ -151,18 +189,51 @@ export const ProductsSection = () => {
                   <div className="absolute inset-0 flex items-center justify-center p-6">
                     <Image
                       alt={`${product.name} — ${product.subtitle}`}
-                      className="object-contain transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2 drop-shadow-xl"
+                      className={`object-contain transition-transform duration-500 drop-shadow-xl ${
+                        product.available
+                          ? "group-hover:scale-110 group-hover:-translate-y-2"
+                          : "grayscale-[40%]"
+                      }`}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
                       src={product.image}
                     />
                   </div>
+
+                  {/* Price badge */}
                   <div
-                    className="absolute top-4 right-4 w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg z-10"
-                    style={{ backgroundColor: product.color }}
+                    className="absolute top-4 right-4 flex flex-col items-end gap-1 z-10"
                   >
-                    {product.price}
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
+                      style={{ backgroundColor: product.color }}
+                    >
+                      {product.price}
+                    </div>
+                    {product.regularPrice && (
+                      <span className="text-[10px] text-foreground/50 line-through px-1 bg-background/70 backdrop-blur-sm rounded-full">
+                        was {product.regularPrice}
+                      </span>
+                    )}
                   </div>
+
+                  {/* Promo / unavailable corner */}
+                  {(product.promoLabel || !product.available) && (
+                    <div className="absolute top-4 left-4 z-10">
+                      {!product.available ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-foreground/80 text-background text-[11px] font-semibold backdrop-blur-sm">
+                          {product.unavailableLabel}
+                        </span>
+                      ) : (
+                        <span
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white shadow-md"
+                          style={{ backgroundColor: product.color }}
+                        >
+                          {product.promoLabel}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Content */}
@@ -203,16 +274,21 @@ export const ProductsSection = () => {
                     className="w-full font-semibold group/btn"
                     color="primary"
                     endContent={
-                      <ArrowRightIcon
-                        className="transition-transform group-hover/btn:translate-x-1"
-                        size={16}
-                      />
+                      product.available ? (
+                        <ArrowRightIcon
+                          className="transition-transform group-hover/btn:translate-x-1"
+                          size={16}
+                        />
+                      ) : null
                     }
+                    isDisabled={!product.available}
                     radius="full"
-                    variant="solid"
+                    variant={product.available ? "solid" : "flat"}
                     onPress={() => openOrder(product.id)}
                   >
-                    Order {product.name}
+                    {product.available
+                      ? `Order ${product.name}`
+                      : `${product.name} back soon`}
                   </Button>
                 </div>
               </div>

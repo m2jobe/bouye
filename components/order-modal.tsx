@@ -10,14 +10,71 @@ import { motion } from "framer-motion";
 
 import { CheckIcon } from "@/components/icons";
 
-const products = [
-  { id: "wonjo", name: "Wonjo", subtitle: "Hibiscus", price: 12.0, color: "#C41E3A" },
-  { id: "ginger", name: "Jinjin", subtitle: "Fresh Ginger Juice", price: 12.0, color: "#D4A017" },
-  { id: "bouye", name: "Bouye", subtitle: "Baobab", price: 12.0, color: "#1B4332" },
-];
+// Bouye launch promo: $12 for the first 7 days, then $15
+const BOUYE_PROMO_END = new Date("2026-06-08T00:00:00-04:00");
+const BOUYE_REGULAR_PRICE = 15;
+const BOUYE_PROMO_PRICE = 12;
+const isBouyePromoActive = () => Date.now() < BOUYE_PROMO_END.getTime();
 
-const BUNDLE_PRICE = 30.0;
-const DELIVERY_FEE = 5.0;
+// Free delivery — June promo, expires at start of July
+const FREE_DELIVERY_END = new Date("2026-07-01T00:00:00-04:00");
+const REGULAR_DELIVERY_FEE = 5;
+const isFreeDeliveryActive = () => Date.now() < FREE_DELIVERY_END.getTime();
+
+const MAX_BOTTLES_PER_ORDER = 10;
+
+type Product = {
+  id: "wonjo" | "ginger" | "bouye";
+  name: string;
+  subtitle: string;
+  price: number;
+  regularPrice?: number;
+  color: string;
+  available: boolean;
+  unavailableReason?: string;
+};
+
+const buildProducts = (): Product[] => {
+  const bouyePromo = isBouyePromoActive();
+
+  return [
+    {
+      id: "wonjo",
+      name: "Wonjo",
+      subtitle: "Hibiscus",
+      price: 10,
+      color: "#C41E3A",
+      available: true,
+    },
+    {
+      id: "ginger",
+      name: "Jinjin",
+      subtitle: "Fresh Ginger Juice",
+      price: 12,
+      color: "#D4A017",
+      available: false,
+      unavailableReason: "Back soon",
+    },
+    {
+      id: "bouye",
+      name: "Bouye",
+      subtitle: "Baobab",
+      price: bouyePromo ? BOUYE_PROMO_PRICE : BOUYE_REGULAR_PRICE,
+      regularPrice: bouyePromo ? BOUYE_REGULAR_PRICE : undefined,
+      color: "#1B4332",
+      available: true,
+    },
+  ];
+};
+
+type ContactMethod = "text" | "call" | "email" | "either";
+
+const contactMethods: { id: ContactMethod; label: string; emoji: string }[] = [
+  { id: "text", label: "Text me", emoji: "💬" },
+  { id: "call", label: "Call me", emoji: "📞" },
+  { id: "email", label: "Email me", emoji: "✉️" },
+  { id: "either", label: "Whatever works", emoji: "👍" },
+];
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -26,51 +83,50 @@ interface OrderModalProps {
 }
 
 export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
+  const products = buildProducts();
+  const freeDelivery = isFreeDeliveryActive();
+  const deliveryFee = freeDelivery ? 0 : REGULAR_DELIVERY_FEE;
+
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const init: Record<string, number> = { wonjo: 0, ginger: 0, bouye: 0 };
+    const target = products.find((p) => p.id === preselect);
 
-    if (preselect && init[preselect] !== undefined) {
+    if (preselect && target?.available) {
       init[preselect] = 1;
     }
 
     return init;
   });
-  const [orderType, setOrderType] = useState<"pickup" | "delivery">("delivery");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [contactMethod, setContactMethod] = useState<ContactMethod>("text");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const regularTotal = products.reduce(
+  const subtotal = products.reduce(
     (sum, p) => sum + p.price * (quantities[p.id] || 0),
     0,
   );
   const itemCount = Object.values(quantities).reduce((a, b) => a + b, 0);
-
-  // Bundle: all 3 juices with at least 1 each = $30 per set of 3
-  const hasAllThree = products.every((p) => (quantities[p.id] || 0) >= 1);
-  const bundleCount = hasAllThree
-    ? Math.min(...products.map((p) => quantities[p.id] || 0))
-    : 0;
-  const extrasTotal = products.reduce((sum, p) => {
-    const extras = Math.max(0, (quantities[p.id] || 0) - bundleCount);
-
-    return sum + extras * p.price;
-  }, 0);
-  const subtotal = bundleCount * BUNDLE_PRICE + extrasTotal;
-  const deliveryFee = orderType === "delivery" ? DELIVERY_FEE : 0;
   const total = subtotal + deliveryFee;
-  const savings = regularTotal - subtotal;
+  const remaining = MAX_BOTTLES_PER_ORDER - itemCount;
+  const atLimit = itemCount >= MAX_BOTTLES_PER_ORDER;
 
   const updateQty = (id: string, delta: number) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: Math.max(0, Math.min(20, (prev[id] || 0) + delta)),
-    }));
+    setQuantities((prev) => {
+      const otherTotal = Object.entries(prev).reduce(
+        (sum, [k, v]) => (k === id ? sum : sum + v),
+        0,
+      );
+      const proposed = Math.max(0, (prev[id] || 0) + delta);
+      const allowed = Math.min(proposed, MAX_BOTTLES_PER_ORDER - otherTotal);
+
+      return { ...prev, [id]: allowed };
+    });
   };
 
   const handleSubmit = async () => {
@@ -79,8 +135,13 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
 
       return;
     }
-    if (orderType === "delivery" && !address.trim()) {
+    if (!address.trim()) {
       setError("Please enter your delivery address.");
+
+      return;
+    }
+    if (itemCount > MAX_BOTTLES_PER_ORDER) {
+      setError(`Orders are limited to ${MAX_BOTTLES_PER_ORDER} bottles per household.`);
 
       return;
     }
@@ -96,6 +157,15 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
           price: p.price,
         }));
 
+      const contactLabel =
+        contactMethods.find((m) => m.id === contactMethod)?.label ?? contactMethod;
+      const composedNotes = [
+        `Preferred contact: ${contactLabel}`,
+        notes.trim() ? `Notes: ${notes.trim()}` : null,
+      ]
+        .filter(Boolean)
+        .join(" · ");
+
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -103,11 +173,12 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
           customer_name: name.trim(),
           customer_email: email.trim(),
           customer_phone: phone.trim(),
-          order_type: orderType,
-          delivery_address: orderType === "delivery" ? address.trim() : null,
+          order_type: "delivery",
+          delivery_address: address.trim(),
           delivery_fee: deliveryFee,
           items,
-          notes: notes.trim() || null,
+          notes: composedNotes,
+          preferred_contact: contactMethod,
         }),
       });
 
@@ -126,11 +197,11 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
   const handleClose = () => {
     if (success) {
       setQuantities({ wonjo: 0, ginger: 0, bouye: 0 });
-      setOrderType("delivery");
       setName("");
       setEmail("");
       setPhone("");
       setAddress("");
+      setContactMethod("text");
       setNotes("");
       setSuccess(false);
       setError("");
@@ -167,14 +238,15 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   Order received!
                 </h3>
                 <p className="text-foreground/50 text-sm max-w-sm mx-auto">
-                  {orderType === "delivery"
-                    ? "We'll confirm delivery details and reach out before heading your way."
-                    : "We'll reach out to confirm your pickup time."}
-                  {" "}Check your email for confirmation.
+                  We&apos;ll reach out via{" "}
+                  <span className="font-medium text-foreground">
+                    {contactMethods.find((m) => m.id === contactMethod)?.label.toLowerCase()}
+                  </span>{" "}
+                  to coordinate delivery details and timing.
                 </p>
                 <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/[0.06] border border-primary/[0.1] text-xs text-primary font-medium">
                   <span>💵</span>
-                  Payment collected on {orderType === "delivery" ? "arrival" : "pickup"} (cash or e-transfer)
+                  Payment collected on arrival (cash or e-transfer)
                 </div>
               </motion.div>
             </ModalBody>
@@ -194,138 +266,143 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
             <ModalHeader className="flex flex-col gap-1 pb-4">
               <h3 className="font-serif text-xl font-bold">Order Bouye</h3>
               <p className="text-xs text-foreground/40 font-normal">
-                Select your juices and how you&apos;d like to get them.
+                Free delivery across the GTA. Pay on arrival.
               </p>
             </ModalHeader>
             <ModalBody className="gap-5">
-              {/* Pickup / Delivery toggle */}
-              <div className="flex gap-2 p-1 rounded-full bg-foreground/[0.03] border border-foreground/[0.06]">
-                <button
-                  className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                    orderType === "pickup"
-                      ? "bg-primary text-white shadow-md"
-                      : "text-foreground/40 hover:text-foreground/60"
-                  }`}
-                  onClick={() => setOrderType("pickup")}
-                >
-                  Pickup · Free
-                </button>
-                <button
-                  className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                    orderType === "delivery"
-                      ? "bg-primary text-white shadow-md"
-                      : "text-foreground/40 hover:text-foreground/60"
-                  }`}
-                  onClick={() => setOrderType("delivery")}
-                >
-                  Delivery · $5
-                </button>
-              </div>
-
-              {/* Product selector */}
-              <div className="space-y-3">
-                {products.map((p) => (
-                  <div
-                    key={p.id}
-                    className="flex items-center justify-between py-3 px-4 rounded-2xl border border-foreground/[0.06] bg-foreground/[0.01]"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{ backgroundColor: `${p.color}12` }}
-                      >
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: p.color }}
-                        />
-                      </div>
-                      <div>
-                        <span className="font-serif font-bold text-sm text-foreground">
-                          {p.name}
-                        </span>
-                        <span className="text-[11px] text-foreground/35 block">
-                          {p.subtitle} · ${p.price.toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        isIconOnly
-                        className="min-w-7 h-7 text-lg"
-                        radius="full"
-                        size="sm"
-                        variant="flat"
-                        onPress={() => updateQty(p.id, -1)}
-                      >
-                        −
-                      </Button>
-                      <span className="w-6 text-center text-sm font-semibold text-foreground">
-                        {quantities[p.id]}
-                      </span>
-                      <Button
-                        isIconOnly
-                        className="min-w-7 h-7 text-lg"
-                        color="primary"
-                        radius="full"
-                        size="sm"
-                        variant="flat"
-                        onPress={() => updateQty(p.id, 1)}
-                      >
-                        +
-                      </Button>
-                    </div>
+              {/* June promo banner */}
+              {freeDelivery && (
+                <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-[#1B4332]/[0.08] to-[#D4A017]/[0.08] border border-[#1B4332]/[0.1]">
+                  <span className="text-xl">🚚</span>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-foreground">
+                      Free delivery — June promo
+                    </p>
+                    <p className="text-[11px] text-foreground/55 leading-snug">
+                      Across the GTA, this month only. No minimum.
+                    </p>
                   </div>
-                ))}
-              </div>
-
-              {/* Bundle upsell */}
-              {itemCount > 0 && !hasAllThree && (
-                <div className="px-4 py-3 rounded-2xl bg-primary/[0.04] border border-primary/[0.08]">
-                  <p className="text-xs text-primary font-medium">
-                    🎉 Get all 3 for $30 (save $6) — add{" "}
-                    {products
-                      .filter((p) => !quantities[p.id])
-                      .map((p) => p.name)
-                      .join(" & ")}{" "}
-                    to unlock the bundle!
-                  </p>
                 </div>
               )}
 
-              {itemCount > 0 && (
-                <div className="px-1 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Chip color="primary" size="sm" variant="flat">
-                        {itemCount} juice{itemCount > 1 ? "s" : ""}
-                      </Chip>
-                      {bundleCount > 0 && (
-                        <Chip color="success" size="sm" variant="flat">
-                          {bundleCount} bundle{bundleCount > 1 ? "s" : ""}
-                        </Chip>
-                      )}
-                    </div>
-                    <span className="text-sm text-foreground/50">
-                      ${subtotal.toFixed(2)}
-                    </span>
-                  </div>
-                  {orderType === "delivery" && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-foreground/40">Delivery fee</span>
-                      <span className="text-sm text-foreground/50">${DELIVERY_FEE.toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between pt-1 border-t border-foreground/[0.04]">
-                    <span className="text-sm font-semibold text-foreground">Total</span>
-                    <div className="text-right">
-                      <span className="font-serif font-bold text-lg text-foreground">
-                        ${total.toFixed(2)}
-                      </span>
-                      {savings > 0 && (
-                        <span className="block text-[11px] text-green-600 dark:text-green-400 font-medium">
-                          You save ${savings.toFixed(2)}
+              {/* Product selector */}
+              <div className="space-y-3">
+                {products.map((p) => {
+                  const qty = quantities[p.id] || 0;
+                  const canAdd = p.available && !atLimit;
+                  const showPromoStrike = !!p.regularPrice;
+
+                  return (
+                    <div
+                      key={p.id}
+                      className={`flex items-center justify-between py-3 px-4 rounded-2xl border ${
+                        p.available
+                          ? "border-foreground/[0.06] bg-foreground/[0.01]"
+                          : "border-foreground/[0.04] bg-foreground/[0.015] opacity-70"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-10 h-10 rounded-xl flex items-center justify-center"
+                          style={{ backgroundColor: `${p.color}12` }}
+                        >
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: p.color }}
+                          />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-serif font-bold text-sm text-foreground">
+                              {p.name}
+                            </span>
+                            {!p.available && (
+                              <Chip
+                                className="text-[10px] h-5 px-2"
+                                size="sm"
+                                variant="flat"
+                              >
+                                {p.unavailableReason ?? "Unavailable"}
+                              </Chip>
+                            )}
+                            {showPromoStrike && (
+                              <Chip
+                                className="text-[10px] h-5 px-2 bg-[#D4A017]/15 text-[#9B7410] dark:text-[#D4A017] font-semibold"
+                                size="sm"
+                                variant="flat"
+                              >
+                                Launch promo
+                              </Chip>
+                            )}
+                          </div>
+                          <span className="text-[11px] text-foreground/35 block">
+                            {p.subtitle} ·{" "}
+                            {showPromoStrike && (
+                              <span className="line-through text-foreground/30 mr-1">
+                                ${p.regularPrice!.toFixed(2)}
+                              </span>
+                            )}
+                            <span className={showPromoStrike ? "font-semibold text-foreground/55" : ""}>
+                              ${p.price.toFixed(2)}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          isIconOnly
+                          className="min-w-7 h-7 text-lg"
+                          isDisabled={!p.available || qty === 0}
+                          radius="full"
+                          size="sm"
+                          variant="flat"
+                          onPress={() => updateQty(p.id, -1)}
+                        >
+                          −
+                        </Button>
+                        <span className="w-6 text-center text-sm font-semibold text-foreground">
+                          {qty}
                         </span>
-                      )}
+                        <Button
+                          isIconOnly
+                          className="min-w-7 h-7 text-lg"
+                          color="primary"
+                          isDisabled={!canAdd}
+                          radius="full"
+                          size="sm"
+                          variant="flat"
+                          onPress={() => updateQty(p.id, 1)}
+                        >
+                          +
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottle counter */}
+              {itemCount > 0 && (
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <Chip color="primary" size="sm" variant="flat">
+                      {itemCount} of {MAX_BOTTLES_PER_ORDER} bottle
+                      {itemCount === 1 ? "" : "s"}
+                    </Chip>
+                    {atLimit && (
+                      <span className="text-[11px] text-foreground/45">
+                        Order limit reached
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-semibold text-foreground">
+                      ${total.toFixed(2)}
+                    </div>
+                    <div className="text-[11px] text-foreground/40">
+                      {freeDelivery
+                        ? "Free delivery"
+                        : `+ $${REGULAR_DELIVERY_FEE.toFixed(2)} delivery`}
                     </div>
                   </div>
                 </div>
@@ -367,41 +444,70 @@ export const OrderModal = ({ isOpen, onClose, preselect }: OrderModalProps) => {
                   variant="bordered"
                   onValueChange={setPhone}
                 />
-                {orderType === "delivery" && (
-                  <Input
-                    isRequired
-                    label="Delivery Address"
-                    placeholder="123 Queen St W, Toronto, ON"
-                    radius="lg"
-                    size="sm"
-                    value={address}
-                    variant="bordered"
-                    onValueChange={setAddress}
-                  />
-                )}
                 <Input
-                  label="Notes (optional)"
-                  placeholder={
-                    orderType === "pickup"
-                      ? "Preferred pickup time, etc."
-                      : "Buzzer code, delivery instructions, etc."
-                  }
+                  isRequired
+                  label="Delivery Address"
+                  placeholder="123 Queen St W, Toronto, ON"
                   radius="lg"
                   size="sm"
-                  value={notes}
+                  value={address}
                   variant="bordered"
-                  onValueChange={setNotes}
+                  onValueChange={setAddress}
                 />
               </div>
 
+              {/* Contact method picker */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-foreground/70 px-1">
+                  How should we reach you to coordinate delivery?
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {contactMethods.map((m) => {
+                    const active = m.id === contactMethod;
+
+                    return (
+                      <button
+                        key={m.id}
+                        className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                          active
+                            ? "bg-primary/[0.08] border-primary/40 text-primary"
+                            : "bg-foreground/[0.01] border-foreground/[0.08] text-foreground/60 hover:border-foreground/[0.15]"
+                        }`}
+                        type="button"
+                        onClick={() => setContactMethod(m.id)}
+                      >
+                        <span className="text-base">{m.emoji}</span>
+                        {m.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[11px] text-foreground/40 px-1">
+                  We&apos;ll confirm timing and address details. No marketing,
+                  just delivery coordination.
+                </p>
+              </div>
+
+              <Input
+                label="Notes (optional)"
+                placeholder="Buzzer code, drop-off spot, allergies, etc."
+                radius="lg"
+                size="sm"
+                value={notes}
+                variant="bordered"
+                onValueChange={setNotes}
+              />
+
+              {/* Payment notice */}
               <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-foreground/[0.025] border border-foreground/[0.06]">
                 <span className="text-lg">💵</span>
                 <div className="flex-1">
                   <p className="text-xs font-semibold text-foreground">
-                    Pay on {orderType === "delivery" ? "arrival" : "pickup"}
+                    Pay on arrival
                   </p>
                   <p className="text-[11px] text-foreground/45 leading-snug">
-                    No upfront payment. Cash or e-transfer accepted when we hand off your juices.
+                    No upfront payment. Cash or e-transfer accepted when we
+                    hand off your juices.
                   </p>
                 </div>
               </div>
